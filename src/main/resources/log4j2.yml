@@ -1,0 +1,30 @@
+Configuration:
+    status: warn
+    name: "Application Logger"
+    properties:
+        property:
+            -   name: LOG_PATTERN
+                value: "%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight{[%p]} [%c{1}]: %msg%n"
+            -   name: LOG_FILENAME
+                value: metrics/app.log
+    Appenders:
+        Console:
+            name: ConsoleAppender
+            target: SYSTEM_OUT
+            follow: true
+            PatternLayout:
+                Pattern: ${LOG_PATTERN}
+    File:
+        name: File
+        fileName: ${LOG_FILENAME}
+        PatternLayout:
+            JsonLayout:
+                compact: false
+                complete: true
+                eventEOL: true
+    Loggers:
+        AsyncRoot:
+            level: info
+            AppenderRef:
+                - ref: ConsoleAppender
+                - ref: FileAppender

@@ -1,0 +1,12 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="marvinrodr.springboot_ddd.skeleton.sample.domain.model.Sample" table="sample">
+        <composite-id name="id" class="marvinrodr.springboot_ddd.skeleton.sample.domain.model.SampleId" access="field">
+            <key-property name="value" column="id" type="string" length="36" access="field"/>
+        </composite-id>
+    </class>
+</hibernate-mapping>

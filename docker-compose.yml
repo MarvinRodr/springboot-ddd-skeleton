@@ -1,0 +1,53 @@
+version: "3.9"
+
+x-database-config-data:
+  &postgres-connection-data
+  environment:
+    POSTGRES_USER: ${POSTGRES_USER}
+    POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    POSTGRES_DB: ${POSTGRES_DB}
+    POSTGRES_URL: ${POSTGRES_URL}
+    POSTGRES_PORT: ${POSTGRES_PORT}
+
+x-commons-cloud-config:
+  &commons-cloud-config
+  networks:
+    - application-cloud-network
+
+services:
+  application-postgres:
+    container_name: marvinrodr-application-postgres
+    image: marvinrodr-application-postgres
+    build:
+      context: ./database
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    expose:
+      - ${POSTGRES_PORT}
+    env_file:
+      - ./database/.env
+    <<: [ *postgres-connection-data, *commons-cloud-config ]
+
+  application-api:
+    container_name: marvinrodr-application-api
+    image: marvinrodr-application-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    platform: linux/amd64
+    ports:
+      - "${APPLICATION_API_PORT}:${APPLICATION_API_PORT}"
+    volumes:
+      - .:/app:delegated
+    env_file:
+      - .env
+    <<: [ *postgres-connection-data, *commons-cloud-config ]
+    tty: true
+    depends_on:
+      - application-postgres
+
+networks:
+  application-cloud-network:

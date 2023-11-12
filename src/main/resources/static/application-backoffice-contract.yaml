@@ -1,0 +1,271 @@
+openapi: 3.0.3
+info:
+    title: Swagger Application - API - OpenAPI 3.0
+    description: |-
+        This is the Application API documentation!
+    contact:
+        email: contact@marvinrodr.com
+    license:
+        name: marvinrodr
+        url: http://www.marvinrodr.com
+    version: 0.0.1
+servers:
+    - url: https://localhost:8080/api
+      description: Local Application Server
+tags:
+    - name: WebDomain
+      description: The web domains listed in the user backoffice
+paths:
+    /web_domain:
+        post:
+            tags:
+                - WebDomain
+            summary: Add a new WebDomain to user backoffice
+            description: Add a new WebDomain to user backoffice
+            operationId: WebDomainCreator
+            requestBody:
+                $ref: '#/components/requestBodies/WebDomainRequest'
+            responses:
+                '201':
+                    $ref: '#/components/schemas/WebDomain'
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '400':
+                    $ref: '#/components/responses/BadRequest'
+            security:
+                - backoffice_auth:
+                      - write:web_domain
+                      - read:web_domain
+        get:
+            tags:
+                - WebDomain
+            summary: Get all WebDomains to user backoffice
+            description: Get all  WebDomains to user backoffice
+            operationId: WebDomainFinderr
+            responses:
+                '200':
+                    $ref: '#/components/schemas/ListOfWebDomain'
+                '204':
+                    $ref: '#/components/responses/NotFound'
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '400':
+                    $ref: '#/components/responses/BadRequest'
+            security:
+                -   backoffice_auth:
+                        - write:web_domain
+                        - read:web_domain
+    /web_domain/{uuid}:
+        get:
+            tags:
+                - WebDomain
+            summary: Find WebDomain by ID
+            description: Returns a single WebDomain
+            operationId: WebDomainFinder
+            parameters:
+                - $ref: '#/components/parameters/UUID'
+            responses:
+                '200':
+                    $ref: '#/components/schemas/WebDomain'
+                '204':
+                    description: WebDomain not found
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '400':
+                    $ref: '#/components/responses/BadRequest'
+            security:
+                - backoffice_auth:
+                      - write:web_domain
+                      - read:web_domain
+        delete:
+            tags:
+                - WebDomain
+            summary: Deletes a WebDomain by ID
+            description: Deletes a WebDomain
+            operationId: WebDomainEraser
+            parameters:
+                - $ref: '#/components/parameters/UUID'
+            responses:
+                '200':
+                    description: WebDomain deleted
+                '204':
+                    description: WebDomain not found
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '400':
+                    $ref: '#/components/responses/BadRequest'
+            security:
+                - backoffice_auth:
+                      - write:web_domain
+                      - read:web_domain
+        put:
+            tags:
+                - WebDomain
+            summary: Updates a WebDomain by ID
+            description: Updates a WebDomain
+            operationId: WebDomainUpdater
+            parameters:
+                -   $ref: '#/components/parameters/UUID'
+            requestBody:
+                $ref: '#/components/requestBodies/WebDomainRequest'
+            responses:
+                '200':
+                    description: WebDomain updated
+                '204':
+                    description: WebDomain not found
+                '401':
+                    $ref: '#/components/responses/Unauthorized'
+                '403':
+                    $ref: '#/components/responses/Forbidden'
+                '400':
+                    $ref: '#/components/responses/BadRequest'
+            security:
+                -   backoffice_auth:
+                        - write:web_domain
+                        - read:web_domain
+components:
+    responses:
+        BadRequest:
+            description: The request cannot be fulfilled due to bad syntax
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/ResponseError'
+        NotFound:
+            description: The specified resource was not found
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/ResponseError'
+        MethodNotAllowed:
+            description: A request was made of a page using a request method not supported by that page
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/ResponseError'
+        Unauthorized:
+            description: Unauthorized
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/ResponseError'
+        Forbidden:
+            description: The request is for something forbidden. Authorization will not help
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/ResponseError'
+        Conflict:
+            description: The request could not be completed because of a conflict in the request
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/ResponseError'
+    schemas:
+        WebDomain:
+            required:
+                - id
+                - name
+            type: object
+            properties:
+                id:
+                    type: string
+                    format: uuid
+                    example: e2d95fb5-e33b-443e-8de1-e4757ba0f759
+                name:
+                    type: string
+                    example: randomdomain.com
+                is_active:
+                    type: boolean
+                    example: true
+                    default: false
+            xml:
+                name: web_domain
+        WebDomainRequestSchema:
+            required:
+                - name
+            type: object
+            properties:
+                id:
+                    type: string
+                    format: uuid
+                    example: e2d95fb5-e33b-443e-8de1-e4757ba0f759
+                name:
+                    type: string
+                    example: randomdomain.com
+                is_active:
+                    type: boolean
+                    example: true
+                    default: false
+            xml:
+                name: web_domain
+        ListOfWebDomain:
+            type: array
+            items:
+                oneOf:
+                    - $ref: '#/components/schemas/WebDomain'
+        ResponseError:
+            type: object
+            properties:
+                code:
+                    type: string
+                message:
+                    type: string
+            required:
+                - code
+                - message
+    parameters:
+        UUID:
+            in: path
+            name: uuid
+            required: true
+            schema:
+                type: string
+                format: uuid
+                example: e2d95fb5-e33b-443e-8de1-e4757ba0f759
+        OffsetParam:
+            in: query
+            name: offset
+            required: false
+            schema:
+                type: integer
+                minimum: 0
+            description: The number of items to skip before starting to collect the result set.
+        LimitParam:
+            in: query
+            name: limit
+            required: false
+            schema:
+                type: integer
+                minimum: 1
+                maximum: 50
+                default: 20
+            description: The numbers of items to return.
+    requestBodies:
+        WebDomainRequest:
+            description: WebDomain object that needs to be added to the DB
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/WebDomainRequestSchema'
+    securitySchemes:
+        backoffice_auth:
+            type: oauth2
+            flows:
+                implicit:
+                    authorizationUrl: https://localhost:8080/api/oauth/authorize
+                    scopes:
+                        write:web_domain: modify web_domain in your account
+                        read:web_domain: read your web_domain
+        api_key:
+            type: apiKey
+            name: api_key
+            in: header

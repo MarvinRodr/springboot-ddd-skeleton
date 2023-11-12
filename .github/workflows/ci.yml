@@ -1,0 +1,35 @@
+name: SpringBoot DDD Skeleton - API | Github Workflows
+
+on: [push]
+
+jobs:
+    build:
+        runs-on: ubuntu-22.04
+
+        steps:
+            - name: 🔀 Checkout 🔀
+              uses: actions/checkout@v3
+
+            - name: Java 2️⃣1️⃣
+              uses: actions/setup-java@v3
+              with:
+                  distribution: 'oracle'
+                  java-version: 21
+
+            - name: 🌊 Hello from SpringBoot DDD Skeleton Github Workflows! 🌊
+              run: echo "Hello from [${{ github.workflow }}]! triggered by the [${{ github.event_name }}] done by [${{ github.actor }}]"
+
+            - name: 🔧 Raise environment 🔧
+              run: |
+                make package
+                make docker-up-d
+
+            - name: ⏳ Wait for the environment to be operational ⏳
+              run: |
+                  while ! make docker-ping-database &>/dev/null; do
+                    echo "Waiting for database connection...😴"
+                    sleep 2
+                  done
+
+            - name: 🔬 Run the tests 🔬
+              run: make docker-test

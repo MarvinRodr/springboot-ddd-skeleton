@@ -1,0 +1,55 @@
+# Shared config
+spring:
+    profiles:
+        active: local
+    datasource:
+        url: "jdbc:postgresql://${POSTGRES_URL:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:application_api_database}"
+        username: "${POSTGRES_USER:application_api_username}"
+        password: "${POSTGRES_PASSWORD:application_api_password}"
+    database:
+        platform: postgres
+        driverClassname: org.postgresql.Driver
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    output.ansi.enabled: always
+    cache:
+        type: none
+    banner:
+        # https://symbl.cc/en/tools/text-to-symbols/
+        # https://www.coolgenerator.com/symbol-text-generator
+        location: classpath:/banner.txt
+    jpa:
+        show-sql: true
+        cache:
+            type: none
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.PostgreSQLDialect
+        hibernate:
+            ddl-auto: validate
+        open-in-view: false
+        lifecycle:
+            timeout-per-shutdown-phase: 10s
+    flyway:
+        baseline-on-migrate: true
+        enabled: true
+
+
+# Server config
+server:
+    servlet:
+        contextPath: /api
+
+# Doc
+springdoc:
+    swagger-ui:
+        path: /swagger-ui.html
+    api-docs:
+        enabled: false
+
+# App info
+app:
+    name: "Application API - BACKOFFICE"
+    description: "Application API - BACKOFFICE"
+    version: 0.0.1-SNAPSHOT
+    groupId: marvinrodr.springboot_ddd
+    artifactId: skeleton

@@ -1,0 +1,37 @@
+{
+	"info": {
+		"_postman_id": "fe17a770-8717-4d1b-8e0f-8743d969b879",
+		"name": "SpringBoot DDD Skeleton - API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12841600"
+	},
+	"item": [
+		{
+			"name": "API",
+			"item": [
+				{
+					"name": "Backoffice",
+					"item": [
+						{
+							"name": "Create Sample",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					],
+					"description": "SpringBoot DDD Skeleton - Backoffice API"
+				},
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
